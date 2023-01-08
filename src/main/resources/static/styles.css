@@ -36,35 +36,29 @@ a:hover {
 
 .login {
     margin: auto;
-    width: 20%;
+    max-width: 500px;
 }
 
 .registration {
     margin: auto;
-    width: 20%;
+    max-width: 500px;
 }
 
-.label {
-    float: right;
+.errorMessage {
+    font-size: 20px;
+    color: red;
     overflow: hidden;
     clear: both;
+    text-align: center;
 }
 
 .input {
-    float: right;
-    overflow: hidden;
-    clear: both;
+    display: block;
 }
 
 .title {
     margin: auto;
-    width: 50%;
+    max-width: 500px;
     padding-top: 100px;
     padding-bottom: 20px;
-    text-align: center;
-}
-
-.submit {
-    margin: 10px;
-    width: 50%;
 }

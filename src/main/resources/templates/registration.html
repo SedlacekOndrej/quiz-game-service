@@ -12,6 +12,8 @@
 
     <div class="registration">
 
+        <p class="errorMessage" th:if="${isError} == true" th:text="${errorMessage}"></p>
+
     <form method="post" action="/user/registration">
         <label class="label">Uživatelské jméno: <input class="input" type="text" name="username"></label><br>
         <label class="label">Heslo: <input class="input" type="password" name="password"></label><br>

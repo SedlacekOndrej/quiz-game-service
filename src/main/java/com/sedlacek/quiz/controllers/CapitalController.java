@@ -18,4 +18,9 @@ public class CapitalController {
     public String getCapitalChoices(Model model) {
         return capitalService.renderContinentChoices(model);
     }
+
+    @GetMapping("/quiz/geography/capitals/europe")
+    public String getEuropeanCapitals(Model model) {
+        return capitalService.renderEuropeanCapitals(model);
+    }
 }
