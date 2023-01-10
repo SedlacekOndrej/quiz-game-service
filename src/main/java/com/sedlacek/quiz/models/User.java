@@ -1,6 +1,7 @@
 package com.sedlacek.quiz.models;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Table(name = "Users")
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,9 +31,5 @@ public class User {
         this.email = email;
         this.level = 1;
         this.exp = 0L;
-    }
-
-    public User() {
-
     }
 }
