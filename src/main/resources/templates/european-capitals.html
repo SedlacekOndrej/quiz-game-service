@@ -8,28 +8,26 @@
 <body>
 <div th:replace="~{fragments/header :: header}"></div>
 
-<div class="indexPage" th:if="${isSomeoneLogged} == false">
+<div class="indexPage" th:if="${loggedUser} == null">
 
   <h1>Pro zobrazení této stránky se musíte přihlásit.</h1>
 
 </div>
 
-<div class="indexPage" th:if="${isSomeoneLogged} == true">
+<div class="indexPage" th:if="${loggedUser} != null">
 
   <h2>Evropa</h2>
 
-  <p th:each="state: ${states}"><span th:text="${state}"></span></p>
-
-  <p th:text="'1.' + ${states.get(0)}"/></span>
-  <p th:text="'2.' + ${states.get(1)}"/></span>
-  <p th:text="'3.' + ${states.get(2)}"/></span>
-  <p th:text="'4.' + ${states.get(3)}"/></span>
-  <p th:text="'5.' + ${states.get(4)}"/></span>
-  <p th:text="'6.' + ${states.get(5)}"/></span>
-  <p th:text="'7.' + ${states.get(6)}"/></span>
-  <p th:text="'8.' + ${states.get(7)}"/></span>
-  <p th:text="'9.' + ${states.get(8)}"/></span>
-  <p th:text="'10.' + ${states.get(9)}"/></span>
+  <p th:text="'1. ' + ${states.get(0)}"/></span>
+  <p th:text="'2. ' + ${states.get(1)}"/></span>
+  <p th:text="'3. ' + ${states.get(2)}"/></span>
+  <p th:text="'4. ' + ${states.get(3)}"/></span>
+  <p th:text="'5. ' + ${states.get(4)}"/></span>
+  <p th:text="'6. ' + ${states.get(5)}"/></span>
+  <p th:text="'7. ' + ${states.get(6)}"/></span>
+  <p th:text="'8. ' + ${states.get(7)}"/></span>
+  <p th:text="'9. ' + ${states.get(8)}"/></span>
+  <p th:text="'10. ' + ${states.get(9)}"/></span>
 
 </div>
 </body>

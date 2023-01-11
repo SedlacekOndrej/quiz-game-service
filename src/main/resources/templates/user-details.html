@@ -7,7 +7,13 @@
 </head>
 <body>
 <div th:replace="~{fragments/header :: header}"></div>
-<div class="userDetails">
+
+<div class="indexPage" th:if="${loggedUser} == null">
+
+    <h1>Pro zobrazení této stránky se musíte přihlásit.</h1>
+</div>
+<div class="userDetails" th:if="${loggedUser} != null">
+
 <h1 class="title">Informace o účtu</h1>
 <div th:text="'Uživatelské jméno: ' + ${loggedUser.username}"/>
 <div th:text="'Email: ' + ${loggedUser.email}"/>

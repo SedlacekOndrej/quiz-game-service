@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,10 +21,8 @@ public class User {
     private String email;
     private int level;
     private Long exp;
-
-    public static boolean isSomeoneLogged = false;
-    @Transient
-    public static User loggedUser = null;
+    @OneToMany(mappedBy = "user")
+    private List<LoginSession> loginSessions;
 
     public User(String username, String password, String email) {
         this.username = username;

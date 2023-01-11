@@ -8,13 +8,13 @@
 <body>
 <div th:replace="~{fragments/header :: header}"></div>
 
-<div class="indexPage" th:if="${isSomeoneLogged} == false">
+<div class="indexPage" th:if="${loggedUser} == null">
 
     <h1>Pro zobrazení této stránky se musíte přihlásit.</h1>
 
 </div>
 
-<div class="indexPage" th:if="${isSomeoneLogged} == true">
+<div class="indexPage" th:if="${loggedUser} != null">
 
     <h2>Vyber si světadíl</h2>
     <a href="/quiz/geography/capitals/europe">Evropa</a><br>

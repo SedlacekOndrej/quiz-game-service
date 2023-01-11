@@ -1,36 +1,31 @@
 package com.sedlacek.quiz.services;
 
 import com.sedlacek.quiz.models.EuropeanCapitals;
+import com.sedlacek.quiz.models.LoginSession;
 import com.sedlacek.quiz.models.User;
+import com.sedlacek.quiz.repositories.LoginSessionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class CapitalService {
 
     EuropeanCapitals europeanCapitals = new EuropeanCapitals(new HashMap<>());
-    List<String> europeanStates = List.of(
-            "Albánie", "Andorra", "Arménie", "Ázerbájdžán", "Belgie", "Bělorusko", "Bosna a Hercegovina",
-            "Bulharsko", "Černá Hora", "Česká republika", "Dánsko", "Estonsko", "Finsko", "Francie", "Gruzie",
-            "Chorvatsko", "Irsko", "Island", "Itálie", "Kazachstán", "Kosovo", "Kypr", "Lichtenštejnsko", "Litva",
-            "Lotyšsko", "Lucembursko", "Maďarsko", "Malta", "Moldavsko", "Monako", "Německo", "Nizozemsko", "Norsko",
-            "Polsko", "Portugalsko", "Rakousko", "Rumunsko", "Rusko", "Řecko", "San Marino", "Severní Makedonie",
-            "Slovensko", "Slovinsko", "Spojené království", "Srbsko", "Španělsko", "Švédsko", "Švýcarsko", "Turecko",
-            "Ukrajina", "Vatikán"
-    );
+    private final UserService userService;
+
+    public CapitalService(UserService userService) {
+        this.userService = userService;
+    }
 
     public String renderContinentChoices(Model model) {
-        model.addAttribute("isSomeoneLogged", User.isSomeoneLogged);
+        model.addAttribute("loggedUser", userService.tryGetLoginSessionUser());
         return "geography-capitals";
     }
 
     public String renderEuropeanCapitals(Model model) {
-        model.addAttribute("isSomeoneLogged", User.isSomeoneLogged);
+        model.addAttribute("loggedUser", userService.tryGetLoginSessionUser());
         model.addAttribute("states", generateRandomStates());
         return "european-capitals";
     }
@@ -38,8 +33,9 @@ public class CapitalService {
     public List<String> generateRandomStates() {
         Random random = new Random();
         List<String> generatedStates = new ArrayList<>();
+        List<String> states = europeanCapitals.getCapitals().keySet().stream().toList();
         while (generatedStates.size() < 10) {
-            String generatedState = europeanStates.get(random.nextInt(50));
+            String generatedState = states.get(random.nextInt(50));
             if (!generatedStates.contains(generatedState)) {
                 generatedStates.add(generatedState);
             }
@@ -51,7 +47,7 @@ public class CapitalService {
         return capital.equals(state);
     }
 
-    public void playTheQuiz(String capital) {
+    public void playTheQuiz(String capital, User user) {
         List<String> states = generateRandomStates();
         long score = 0;
         for (String state : states) {
@@ -59,6 +55,6 @@ public class CapitalService {
                 score++;
             }
         }
-        User.loggedUser.setExp(User.loggedUser.getExp() + (score * 10));
+        user.setExp(user.getExp() + (score * 10));
     }
 }

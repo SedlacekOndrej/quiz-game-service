@@ -1,7 +1,9 @@
 package com.sedlacek.quiz.services;
 
 import com.sedlacek.quiz.models.ErrorMessage;
+import com.sedlacek.quiz.models.LoginSession;
 import com.sedlacek.quiz.models.User;
+import com.sedlacek.quiz.repositories.LoginSessionRepository;
 import com.sedlacek.quiz.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -9,30 +11,35 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final LoginSessionRepository loginSessionRepository;
     private ErrorMessage message = new ErrorMessage();
+    private LoginSession loginSessionUser;
 
-    public UserService(UserRepository userRepository) {
+
+    public UserService(UserRepository userRepository, LoginSessionRepository loginSessionRepository) {
         this.userRepository = userRepository;
+        this.loginSessionRepository = loginSessionRepository;
     }
 
     public String renderIndexPage(Model model) {
-        model.addAttribute("isSomeoneLogged", User.isSomeoneLogged);
-        model.addAttribute("loggedUser", User.loggedUser);
-        ErrorMessage.isError = false;
+        if (loginSessionUser != null) {
+            model.addAttribute("loggedUser", loginSessionUser.tryGetLoggedUser());
+        }
+            ErrorMessage.isError = false;
         return "index";
     }
 
     public String renderRegistrationPage(Model model) {
-        model.addAttribute("isSomeoneLogged", User.isSomeoneLogged);
-        model.addAttribute("loggedUser", User.loggedUser);
-        model.addAttribute("isError", ErrorMessage.isError);
-        model.addAttribute("errorMessage", message.getMessage());
+        if (loginSessionUser != null) {
+            model.addAttribute("loggedUser", loginSessionUser.tryGetLoggedUser());
+        }
+            model.addAttribute("isError", ErrorMessage.isError);
+            model.addAttribute("errorMessage", message.getMessage());
         return "registration";
     }
 
@@ -69,42 +76,43 @@ public class UserService {
     }
 
     public String renderLoginPage(Model model) {
-        model.addAttribute("isSomeoneLogged", User.isSomeoneLogged);
-        model.addAttribute("loggedUser", User.loggedUser);
-        model.addAttribute("isError", ErrorMessage.isError);
-        model.addAttribute("errorMessage", message.getMessage());
+        if (loginSessionUser != null) {
+            model.addAttribute("loggedUser", loginSessionUser.tryGetLoggedUser());
+        }
+            model.addAttribute("isError", ErrorMessage.isError);
+            model.addAttribute("errorMessage", message.getMessage());
         return "login";
     }
 
     public String loginUser(@ModelAttribute User user) {
-        if (!userRepository.existsByUsername(user.getUsername())) {
+        if (!userRepository.existsByUsername(user.getUsername()) ||
+                !user.getPassword().equals(userRepository.findByUsername(user.getUsername()).getPassword())) {
             ErrorMessage.isError = true;
-            message.setMessage("Zadané uživatelské jméno neexistuje!");
-            return "redirect:/user/login";
-        }
-        if (!user.getPassword().equals(userRepository.findByUsername(user.getUsername()).getPassword())) {
-            ErrorMessage.isError = true;
-            message.setMessage("Špatné heslo!");
+            message.setMessage("Špatně zadané uživatelské jméno nebo heslo!");
             return "redirect:/user/login";
         }
         ErrorMessage.isError = false;
-        User.isSomeoneLogged = true;
-        User.loggedUser = userRepository.findByUsername(user.getUsername());
+        LoginSession loginSession = new LoginSession(userRepository.findByUsername(user.getUsername()));
+        loginSessionUser = loginSessionRepository.save(loginSession);
         return "redirect:/";
     }
 
     public String logoutUser() {
-        User.isSomeoneLogged = false;
-        User.loggedUser = null;
+        loginSessionRepository.delete(loginSessionUser);
+        loginSessionUser = null;
         return "redirect:/";
     }
 
     public String detailsUser(Model model) {
-        User user = User.loggedUser;
-        user.setLevel(levelCheck(User.loggedUser));
-        model.addAttribute("isSomeoneLogged", User.isSomeoneLogged);
-        model.addAttribute("loggedUser", user);
-        return "user-details";
+        if (loginSessionUser != null) {
+            User user = loginSessionUser.tryGetLoggedUser();
+            if (user != null) {
+                user.setLevel(levelCheck(loginSessionUser.getUser()));
+            }
+            model.addAttribute("loggedUser", user);
+        }
+            return "user-details";
+
     }
 
     public int levelCheck(User user) {
@@ -133,4 +141,18 @@ public class UserService {
     public boolean emptyEmail(User user) {
         return user.getEmail().equals("");
     }
+
+    public LoginSession getLoginSessionUser() {
+        return this.loginSessionUser;
+    }
+
+    public User tryGetLoginSessionUser() {
+        List<LoginSession> loginSessions = loginSessionRepository.findAll();
+        User user = null;
+        if (loginSessions.size() > 0) {
+            user = loginSessions.get(0).getUser();
+        }
+        return user;
+    }
+
 }

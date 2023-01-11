@@ -8,7 +8,7 @@
 <body>
     <div th:replace="~{fragments/header :: header}"></div>
 
-        <div class="indexPage" th:if="${isSomeoneLogged} == false">
+        <div class="indexPage" th:if="${loggedUser} == null">
 
             <h1>Vítej ve hře Kvíz!</h1>
             <h1>Zde můžeš ukázat svoji znalost zeměpisu!</h1>
@@ -16,9 +16,9 @@
             <h3>V této hře si každý hráč vytvoří účet s úrovní 1 a správnými odpověďmi se bude snažit svou úroveň zvyšovat a tím si odemykat těžší otázky, které mu pomohou svou úroveň zvyšovat rychleji.</h3>
         </div>
 
-    <div class="indexPage" th:if="${isSomeoneLogged} == true">
+    <div class="indexPage" th:if="${loggedUser} != null">
 
-        <h1 th:text="'Vítej, ' + ${loggedUser.username} + '!'"></h1>
+        <h1 th:text="'Vítej, ' + ${loggedUser.getUsername()} + '!'"></h1>
         <h2>Vyber si co chceš hrát</h2>
         <a href="/quiz/geography/capitals">Hlavní města</a>
 
