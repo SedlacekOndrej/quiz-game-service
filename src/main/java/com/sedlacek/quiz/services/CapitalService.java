@@ -1,7 +1,7 @@
 package com.sedlacek.quiz.services;
 
 import com.sedlacek.quiz.models.Capital;
-import com.sedlacek.quiz.models.EuropeanCapitals;
+import com.sedlacek.quiz.models.States;
 import com.sedlacek.quiz.models.User;
 import com.sedlacek.quiz.repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,9 @@ import java.util.*;
 @Service
 public class CapitalService {
 
-    EuropeanCapitals europeanCapitals = new EuropeanCapitals(new HashMap<>());
+    Map<String, String> europeanCapitals = States.Europe;
+    Map<String, String> asianAndOceanicCapitals = States.AsiaAndOceania;
+    Map<String, String> chosenContinent;
     List<String> states = new ArrayList<>();
     long score;
     private final UserService userService;
@@ -36,28 +38,47 @@ public class CapitalService {
     }
 
     public String renderEuropeanCapitals(Model model) {
-        states = generateRandomStates();
+        states = generateRandomStates(europeanCapitals);
+        chosenContinent = europeanCapitals;
         model.addAttribute("loggedUser", userService.tryGetLoginSessionUser());
         model.addAttribute("states", states);
-        model.addAttribute("answers1", generateAnswers(states.get(0)));
-        model.addAttribute("answers2", generateAnswers(states.get(1)));
-        model.addAttribute("answers3", generateAnswers(states.get(2)));
-        model.addAttribute("answers4", generateAnswers(states.get(3)));
-        model.addAttribute("answers5", generateAnswers(states.get(4)));
-        model.addAttribute("answers6", generateAnswers(states.get(5)));
-        model.addAttribute("answers7", generateAnswers(states.get(6)));
-        model.addAttribute("answers8", generateAnswers(states.get(7)));
-        model.addAttribute("answers9", generateAnswers(states.get(8)));
-        model.addAttribute("answers10", generateAnswers(states.get(9)));
-        return "european-capitals";
+        model.addAttribute("answers1", generateAnswers(states.get(0), chosenContinent));
+        model.addAttribute("answers2", generateAnswers(states.get(1), chosenContinent));
+        model.addAttribute("answers3", generateAnswers(states.get(2), chosenContinent));
+        model.addAttribute("answers4", generateAnswers(states.get(3), chosenContinent));
+        model.addAttribute("answers5", generateAnswers(states.get(4), chosenContinent));
+        model.addAttribute("answers6", generateAnswers(states.get(5), chosenContinent));
+        model.addAttribute("answers7", generateAnswers(states.get(6), chosenContinent));
+        model.addAttribute("answers8", generateAnswers(states.get(7), chosenContinent));
+        model.addAttribute("answers9", generateAnswers(states.get(8), chosenContinent));
+        model.addAttribute("answers10", generateAnswers(states.get(9), chosenContinent));
+        return "capitals";
     }
 
-    public List<String> generateRandomStates() {
+    public String renderAsianAndOceanianCapitals(Model model) {
+        states = generateRandomStates(asianAndOceanicCapitals);
+        chosenContinent = asianAndOceanicCapitals;
+        model.addAttribute("loggedUser", userService.tryGetLoginSessionUser());
+        model.addAttribute("states", states);
+        model.addAttribute("answers1", generateAnswers(states.get(0), chosenContinent));
+        model.addAttribute("answers2", generateAnswers(states.get(1), chosenContinent));
+        model.addAttribute("answers3", generateAnswers(states.get(2), chosenContinent));
+        model.addAttribute("answers4", generateAnswers(states.get(3), chosenContinent));
+        model.addAttribute("answers5", generateAnswers(states.get(4), chosenContinent));
+        model.addAttribute("answers6", generateAnswers(states.get(5), chosenContinent));
+        model.addAttribute("answers7", generateAnswers(states.get(6), chosenContinent));
+        model.addAttribute("answers8", generateAnswers(states.get(7), chosenContinent));
+        model.addAttribute("answers9", generateAnswers(states.get(8), chosenContinent));
+        model.addAttribute("answers10", generateAnswers(states.get(9), chosenContinent));
+        return "capitals";
+    }
+
+    public List<String> generateRandomStates(Map<String, String> continent) {
         Random random = new Random();
         List<String> generatedStates = new ArrayList<>();
-        List<String> states = europeanCapitals.getCapitals().keySet().stream().toList();
+        List<String> states = continent.keySet().stream().toList();
         while (generatedStates.size() < 10) {
-            String generatedState = states.get(random.nextInt(50));
+            String generatedState = states.get(random.nextInt(continent.size() - 1));
             if (!generatedStates.contains(generatedState)) {
                 generatedStates.add(generatedState);
             }
@@ -65,11 +86,11 @@ public class CapitalService {
         return generatedStates;
     }
 
-    public List<String> generateAnswers(String state) {
+    public List<String> generateAnswers(String state, Map<String, String> continent) {
         Random random = new Random();
         List<String> generatedAnswers = new ArrayList<>();
-        generatedAnswers.add(europeanCapitals.getCapitals().get(state));
-        List<String> capitals = europeanCapitals.getCapitals().values().stream().toList();
+        generatedAnswers.add(continent.get(state));
+        List<String> capitals = continent.values().stream().toList();
         while (generatedAnswers.size() < 4) {
             String generatedAnswer = capitals.get(random.nextInt(50));
             if (!generatedAnswers.contains(generatedAnswer)) {
@@ -91,7 +112,7 @@ public class CapitalService {
             if (capitals.get(index) == null) {
                 capitals.set(index, "");
             }
-            if (rightAnswer(europeanCapitals.getCapitals().get(state), capitals.get(index))) {
+            if (rightAnswer(chosenContinent.get(state), capitals.get(index))) {
                 score++;
             }
             index++;

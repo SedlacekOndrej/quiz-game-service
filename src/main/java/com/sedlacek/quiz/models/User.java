@@ -12,10 +12,7 @@ import java.util.List;
 @Setter
 @Table(name = "users")
 @NoArgsConstructor
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class User extends EntityBase {
     private String username;
     private String password;
     private String email;

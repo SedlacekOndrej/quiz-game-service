@@ -12,10 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "Sessions")
-public class LoginSession {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class LoginSession extends EntityBase {
     private LocalDateTime created;
     @ManyToOne
     private User user;

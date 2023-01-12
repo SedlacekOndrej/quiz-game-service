@@ -16,9 +16,9 @@
 
 <div class="indexPage" th:if="${loggedUser} != null">
 
-  <h2>Evropa</h2>
+  <h2>Jaké jsou hlavní města těchto států?</h2>
 
-  <form action="/quiz/geography/capitals/europe" method="post">
+  <form action="/quiz/geography/capitals/results" method="post">
 
     <label class="state" th:text="'1. ' + ${states.get(0)}"></label>
     <div th:each="answer : ${answers1}">

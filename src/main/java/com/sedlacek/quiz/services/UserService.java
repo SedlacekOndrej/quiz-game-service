@@ -5,6 +5,7 @@ import com.sedlacek.quiz.models.LoginSession;
 import com.sedlacek.quiz.models.User;
 import com.sedlacek.quiz.repositories.LoginSessionRepository;
 import com.sedlacek.quiz.repositories.UserRepository;
+import org.hibernate.internal.util.StringHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -44,7 +45,8 @@ public class UserService {
     }
 
     public String registerNewUser(@ModelAttribute User user, Model model, String passwordConfirm) {
-        if (emptyUsername(user) || emptyPassword(user) || emptyEmail(user)) {
+        if (StringHelper.isBlank(user.getUsername()) || StringHelper.isBlank(user.getPassword())
+                || StringHelper.isBlank(user.getEmail())) {
             ErrorMessage.isError = true;
             message.setMessage("Vyplňte všechna pole!");
             return "redirect:/user/registration";
@@ -125,18 +127,6 @@ public class UserService {
             }
         }
         return 1;
-    }
-
-    public boolean emptyUsername(User user) {
-        return user.getUsername().equals("");
-    }
-
-    public boolean emptyPassword(User user) {
-        return user.getPassword().equals("");
-    }
-
-    public boolean emptyEmail(User user) {
-        return user.getEmail().equals("");
     }
 
     public User tryGetLoginSessionUser() {

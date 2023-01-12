@@ -27,8 +27,8 @@ public class CapitalController {
         return capitalService.renderEuropeanCapitals(model);
     }
 
-    @PostMapping("/quiz/geography/capitals/europe")
-    public String postEuropeanCapitals(@ModelAttribute Capital capital) {
+    @PostMapping("/quiz/geography/capitals/results")
+    public String postAnswers(@ModelAttribute Capital capital) {
         return capitalService.postAnswers(capital);
     }
 
@@ -36,4 +36,14 @@ public class CapitalController {
     public String getResults(Model model) {
         return capitalService.renderResults(model);
     }
+
+    @GetMapping("/quiz/geography/capitals/asia")
+    public String getAsianAndOceanicCapitals(Model model) {
+        return capitalService.renderAsianAndOceanianCapitals(model);
+    }
+
+    /*@PostMapping("/quiz/geography/capitals/asia")
+    public String postAsianAndOceanicCapitals(@ModelAttribute Capital capital) {
+        return capitalService.postAnswers(capital);
+    }*/
 }
