@@ -106,9 +106,6 @@ public class UserService {
     public String detailsUser(Model model) {
         if (loginSessionUser != null) {
             User user = loginSessionUser.tryGetLoggedUser();
-            if (user != null) {
-                user.setLevel(levelCheck(loginSessionUser.getUser()));
-            }
             model.addAttribute("loggedUser", user);
         }
             return "user-details";
@@ -153,6 +150,10 @@ public class UserService {
             user = loginSessions.get(0).getUser();
         }
         return user;
+    }
+
+    public void updateUserOnLoginSession(User user) {
+        loginSessionUser.setUser(user);
     }
 
 }

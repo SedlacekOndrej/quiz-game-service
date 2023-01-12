@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Table(name = "Users")
+@Table(name = "users")
 @NoArgsConstructor
 public class User {
     @Id
@@ -30,5 +30,9 @@ public class User {
         this.email = email;
         this.level = 1;
         this.exp = 0L;
+    }
+
+    public void addExp(long exp) {
+        this.exp = this.exp + exp;
     }
 }

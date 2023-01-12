@@ -1,11 +1,12 @@
 package com.sedlacek.quiz.services;
 
+import com.sedlacek.quiz.models.Capital;
 import com.sedlacek.quiz.models.EuropeanCapitals;
-import com.sedlacek.quiz.models.LoginSession;
 import com.sedlacek.quiz.models.User;
-import com.sedlacek.quiz.repositories.LoginSessionRepository;
+import com.sedlacek.quiz.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.*;
 
@@ -13,10 +14,14 @@ import java.util.*;
 public class CapitalService {
 
     EuropeanCapitals europeanCapitals = new EuropeanCapitals(new HashMap<>());
+    List<String> states = new ArrayList<>();
+    long score;
     private final UserService userService;
+    private final UserRepository userRepository;
 
-    public CapitalService(UserService userService) {
+    public CapitalService(UserService userService, UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     public String renderContinentChoices(Model model) {
@@ -24,8 +29,14 @@ public class CapitalService {
         return "geography-capitals";
     }
 
+    public String renderResults(Model model) {
+        model.addAttribute("loggedUser", userService.tryGetLoginSessionUser());
+        model.addAttribute("score", score);
+        return "results";
+    }
+
     public String renderEuropeanCapitals(Model model) {
-        List<String> states = generateRandomStates();
+        states = generateRandomStates();
         model.addAttribute("loggedUser", userService.tryGetLoginSessionUser());
         model.addAttribute("states", states);
         model.addAttribute("answers1", generateAnswers(states.get(0)));
@@ -73,14 +84,27 @@ public class CapitalService {
         return capital.equals(state);
     }
 
-    public void playTheQuiz(String capital, User user) {
-        List<String> states = generateRandomStates();
-        long score = 0;
+    public void playTheQuiz(List<String> capitals) {
+        score = 0;
+        int index = 0;
         for (String state : states) {
-            if (rightAnswer(europeanCapitals.getCapitals().get(state), capital)) {
+            if (capitals.get(index) == null) {
+                capitals.set(index, "");
+            }
+            if (rightAnswer(europeanCapitals.getCapitals().get(state), capitals.get(index))) {
                 score++;
             }
+            index++;
         }
-        user.setExp(user.getExp() + (score * 10));
+    }
+
+    public String postAnswers(@ModelAttribute Capital capital) {
+        List<String> answeredCapitals = capital.answeredCapitals();
+        playTheQuiz(answeredCapitals);
+        User user = userService.tryGetLoginSessionUser();
+        user.addExp(score * 10);
+        user.setLevel(userService.levelCheck(user));
+        userService.updateUserOnLoginSession(userRepository.save(user));
+        return "redirect:/quiz/geography/results";
     }
 }
