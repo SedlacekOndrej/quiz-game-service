@@ -1,12 +1,15 @@
 package com.sedlacek.quiz.controllers;
 
 import com.sedlacek.quiz.models.Capital;
+import com.sedlacek.quiz.models.States;
 import com.sedlacek.quiz.services.CapitalService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.Map;
 
 @Controller
 public class CapitalController {
@@ -24,12 +27,13 @@ public class CapitalController {
 
     @GetMapping("/quiz/geography/capitals/europe")
     public String getEuropeanCapitals(Model model) {
-        return capitalService.renderEuropeanCapitals(model);
+        Map<String, String> continent = States.Europe;
+        return capitalService.renderCapitals(model, continent);
     }
 
     @PostMapping("/quiz/geography/capitals/results")
-    public String postAnswers(@ModelAttribute Capital capital) {
-        return capitalService.postAnswers(capital);
+    public String postAnswers(@ModelAttribute Capital capital, Map<String, String> chosenContinent) {
+        return capitalService.postAnswers(capital, chosenContinent);
     }
 
     @GetMapping("/quiz/geography/results")
@@ -39,11 +43,8 @@ public class CapitalController {
 
     @GetMapping("/quiz/geography/capitals/asia")
     public String getAsianAndOceanicCapitals(Model model) {
-        return capitalService.renderAsianAndOceanianCapitals(model);
+        Map<String, String> continent = States.AsiaAndOceania;
+        return capitalService.renderCapitals(model, continent);
     }
 
-    /*@PostMapping("/quiz/geography/capitals/asia")
-    public String postAsianAndOceanicCapitals(@ModelAttribute Capital capital) {
-        return capitalService.postAnswers(capital);
-    }*/
 }

@@ -1,7 +1,6 @@
 package com.sedlacek.quiz.services;
 
 import com.sedlacek.quiz.models.Capital;
-import com.sedlacek.quiz.models.States;
 import com.sedlacek.quiz.models.User;
 import com.sedlacek.quiz.repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -13,11 +12,9 @@ import java.util.*;
 @Service
 public class CapitalService {
 
-    Map<String, String> europeanCapitals = States.Europe;
-    Map<String, String> asianAndOceanicCapitals = States.AsiaAndOceania;
-    Map<String, String> chosenContinent;
-    List<String> states = new ArrayList<>();
-    long score;
+    private Map<String, String> chosenContinent;
+    private List<String> states = new ArrayList<>();
+    private long score;
     private final UserService userService;
     private final UserRepository userRepository;
 
@@ -37,39 +34,21 @@ public class CapitalService {
         return "results";
     }
 
-    public String renderEuropeanCapitals(Model model) {
-        states = generateRandomStates(europeanCapitals);
-        chosenContinent = europeanCapitals;
+    public String renderCapitals(Model model, Map<String, String> continent) {
+        states = generateRandomStates(continent);
+        chosenContinent = continent;
         model.addAttribute("loggedUser", userService.tryGetLoginSessionUser());
         model.addAttribute("states", states);
-        model.addAttribute("answers1", generateAnswers(states.get(0), chosenContinent));
-        model.addAttribute("answers2", generateAnswers(states.get(1), chosenContinent));
-        model.addAttribute("answers3", generateAnswers(states.get(2), chosenContinent));
-        model.addAttribute("answers4", generateAnswers(states.get(3), chosenContinent));
-        model.addAttribute("answers5", generateAnswers(states.get(4), chosenContinent));
-        model.addAttribute("answers6", generateAnswers(states.get(5), chosenContinent));
-        model.addAttribute("answers7", generateAnswers(states.get(6), chosenContinent));
-        model.addAttribute("answers8", generateAnswers(states.get(7), chosenContinent));
-        model.addAttribute("answers9", generateAnswers(states.get(8), chosenContinent));
-        model.addAttribute("answers10", generateAnswers(states.get(9), chosenContinent));
-        return "capitals";
-    }
-
-    public String renderAsianAndOceanianCapitals(Model model) {
-        states = generateRandomStates(asianAndOceanicCapitals);
-        chosenContinent = asianAndOceanicCapitals;
-        model.addAttribute("loggedUser", userService.tryGetLoginSessionUser());
-        model.addAttribute("states", states);
-        model.addAttribute("answers1", generateAnswers(states.get(0), chosenContinent));
-        model.addAttribute("answers2", generateAnswers(states.get(1), chosenContinent));
-        model.addAttribute("answers3", generateAnswers(states.get(2), chosenContinent));
-        model.addAttribute("answers4", generateAnswers(states.get(3), chosenContinent));
-        model.addAttribute("answers5", generateAnswers(states.get(4), chosenContinent));
-        model.addAttribute("answers6", generateAnswers(states.get(5), chosenContinent));
-        model.addAttribute("answers7", generateAnswers(states.get(6), chosenContinent));
-        model.addAttribute("answers8", generateAnswers(states.get(7), chosenContinent));
-        model.addAttribute("answers9", generateAnswers(states.get(8), chosenContinent));
-        model.addAttribute("answers10", generateAnswers(states.get(9), chosenContinent));
+        model.addAttribute("answers1", generateAnswers(states.get(0), continent));
+        model.addAttribute("answers2", generateAnswers(states.get(1), continent));
+        model.addAttribute("answers3", generateAnswers(states.get(2), continent));
+        model.addAttribute("answers4", generateAnswers(states.get(3), continent));
+        model.addAttribute("answers5", generateAnswers(states.get(4), continent));
+        model.addAttribute("answers6", generateAnswers(states.get(5), continent));
+        model.addAttribute("answers7", generateAnswers(states.get(6), continent));
+        model.addAttribute("answers8", generateAnswers(states.get(7), continent));
+        model.addAttribute("answers9", generateAnswers(states.get(8), continent));
+        model.addAttribute("answers10", generateAnswers(states.get(9), continent));
         return "capitals";
     }
 
@@ -119,7 +98,7 @@ public class CapitalService {
         }
     }
 
-    public String postAnswers(@ModelAttribute Capital capital) {
+    public String postAnswers(@ModelAttribute Capital capital, Map<String, String> chosenContinent) {
         List<String> answeredCapitals = capital.answeredCapitals();
         playTheQuiz(answeredCapitals);
         User user = userService.tryGetLoginSessionUser();
