@@ -139,10 +139,6 @@ public class UserService {
         return user.getEmail().equals("");
     }
 
-    public LoginSession getLoginSessionUser() {
-        return this.loginSessionUser;
-    }
-
     public User tryGetLoginSessionUser() {
         List<LoginSession> loginSessions = loginSessionRepository.findAll();
         User user = null;
