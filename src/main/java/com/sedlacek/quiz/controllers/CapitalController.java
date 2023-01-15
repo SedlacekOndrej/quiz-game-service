@@ -7,12 +7,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Map;
 
 @Controller
 public class CapitalController {
+
+    Map<String, String> continent;
 
     private final CapitalService capitalService;
 
@@ -25,26 +28,22 @@ public class CapitalController {
         return capitalService.renderContinentChoices(model);
     }
 
-    @GetMapping("/quiz/geography/capitals/europe")
-    public String getEuropeanCapitals(Model model) {
-        Map<String, String> continent = States.Europe;
+    @GetMapping("/quiz/geography/capitals/{chosenContinent}")
+    public String getChosenCapitals(@PathVariable String chosenContinent, Model model) {
+        if (chosenContinent.equals("europe")) continent = States.Europe;
+        else if (chosenContinent.equals("asia")) continent = States.AsiaAndOceania;
+        else if (chosenContinent.equals("america")) continent = States.NorthAndSouthAmerica;
         return capitalService.renderCapitals(model, continent);
     }
 
     @PostMapping("/quiz/geography/capitals/results")
-    public String postAnswers(@ModelAttribute Capital capital, Map<String, String> chosenContinent) {
-        return capitalService.postAnswers(capital, chosenContinent);
+    public String postAnswers(@ModelAttribute Capital capital) {
+        return capitalService.postAnswers(capital);
     }
 
     @GetMapping("/quiz/geography/results")
     public String getResults(Model model) {
         return capitalService.renderResults(model);
-    }
-
-    @GetMapping("/quiz/geography/capitals/asia")
-    public String getAsianAndOceanicCapitals(Model model) {
-        Map<String, String> continent = States.AsiaAndOceania;
-        return capitalService.renderCapitals(model, continent);
     }
 
 }

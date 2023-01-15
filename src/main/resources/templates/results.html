@@ -18,9 +18,13 @@
 
     <h2>Výsledky</h2>
 
-    <p th:text="'Uhodl jsi ' + ${score} + ' z 10 otázek.'"></p>
+    <p th:text="'Uhodl jsi ' + ${score} + ' z 10 otázek.'"></p></span>
+    <p th:if="${!failedStates.isEmpty()}" th:text="'Špatně jsi měl tyto státy:'"></p></span>
+    <div th:each="state : ${failedStates}">
+        <p th:text="${state}"></p>
+    </div>
 
-    <a href="/quiz/geography/capitals">Zkusit znovu</a>
+    <a href="/quiz/geography/capitals">Zkusit znovu</a></span>
     <a href="/">Zpět na hlavní stránku</a>
 
 </div>

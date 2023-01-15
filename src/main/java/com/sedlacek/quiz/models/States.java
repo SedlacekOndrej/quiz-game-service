@@ -111,4 +111,31 @@ public class States {
             Map.entry("Vietnam", "Hanoj"),
             Map.entry("Východní Timor", "Dili")
     );
+
+    public static final Map<String, String> NorthAndSouthAmerica = Map.ofEntries(
+            Map.entry("Kanada", "Ottawa"),
+            Map.entry("Spojené státy americké", "Washington, D.C."),
+            Map.entry("Mexiko", "Mexico City"),
+            Map.entry("Belize", "Belmopan"),
+            Map.entry("Guatemala", "Guatemala"),
+            Map.entry("Honduras", "Tegucigalpa"),
+            Map.entry("Kostarika", "San José"),
+            Map.entry("Nikaragua", "Managua"),
+            Map.entry("Panama", "Panamá"),
+            Map.entry("Salvador", "San Salvador"),
+            Map.entry("Dominikánská republika", "Santo Domingo"),
+            Map.entry("Jamajka", "Kingston"),
+            Map.entry("Kuba", "Havana"),
+            Map.entry("Argentina", "Buenos Aires"),
+            Map.entry("Bolívie", "Sucre"),
+            Map.entry("Brazílie", "Brasília"),
+            Map.entry("Ekvádor", "Quito"),
+            Map.entry("Guyana", "Georgetown"),
+            Map.entry("Chile", "Santiago de Chile"),
+            Map.entry("Kolumbie", "Bogotá"),
+            Map.entry("Paraguay", "Asunción"),
+            Map.entry("Peru", "Lima"),
+            Map.entry("Surinam", "Paramaribo"),
+            Map.entry("Venezuela", "Caracas")
+    );
 }

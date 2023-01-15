@@ -14,6 +14,7 @@ public class CapitalService {
 
     private Map<String, String> chosenContinent;
     private List<String> states = new ArrayList<>();
+    private final List<String> failedStates = new ArrayList<>();
     private long score;
     private final UserService userService;
     private final UserRepository userRepository;
@@ -31,6 +32,7 @@ public class CapitalService {
     public String renderResults(Model model) {
         model.addAttribute("loggedUser", userService.tryGetLoginSessionUser());
         model.addAttribute("score", score);
+        model.addAttribute("failedStates", failedStates);
         return "results";
     }
 
@@ -71,7 +73,7 @@ public class CapitalService {
         generatedAnswers.add(continent.get(state));
         List<String> capitals = continent.values().stream().toList();
         while (generatedAnswers.size() < 4) {
-            String generatedAnswer = capitals.get(random.nextInt(50));
+            String generatedAnswer = capitals.get(random.nextInt(continent.size() - 1));
             if (!generatedAnswers.contains(generatedAnswer)) {
                 generatedAnswers.add(generatedAnswer);
             }
@@ -87,18 +89,21 @@ public class CapitalService {
     public void playTheQuiz(List<String> capitals) {
         score = 0;
         int index = 0;
+        failedStates.clear();
         for (String state : states) {
             if (capitals.get(index) == null) {
                 capitals.set(index, "");
             }
             if (rightAnswer(chosenContinent.get(state), capitals.get(index))) {
                 score++;
+            } else {
+                failedStates.add(state);
             }
             index++;
         }
     }
 
-    public String postAnswers(@ModelAttribute Capital capital, Map<String, String> chosenContinent) {
+    public String postAnswers(@ModelAttribute Capital capital) {
         List<String> answeredCapitals = capital.answeredCapitals();
         playTheQuiz(answeredCapitals);
         User user = userService.tryGetLoginSessionUser();
