@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Kvíz</title>
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
+</head>
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+
+        <div class="indexPage" th:if="${loggedUser} == null">
+
+            <h1>Vítej ve hře Kvíz!</h1>
+            <h1>Zde můžeš ukázat svoji znalost zeměpisu!</h1>
+            <h1>Znáš všechna hlavní města států na světě?</h1>
+            <h3>V této hře si každý hráč vytvoří účet s úrovní 1 a správnými odpověďmi se bude snažit svou úroveň zvyšovat a tím si odemykat těžší otázky, které mu pomohou svou úroveň zvyšovat rychleji.</h3>
+        </div>
+
+    <div class="indexPage" th:if="${loggedUser} != null">
+
+        <h1 th:text="'Vítej, ' + ${loggedUser.getUsername()} + '!'"></h1>
+        <h2>Vyber si co chceš hrát</h2>
+        <a href="/quiz/geography/capitals">Hlavní města</a>
+
+    </div>
+</body>
+</html>

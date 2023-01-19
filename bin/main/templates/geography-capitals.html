@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Kvíz</title>
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="indexPage" th:if="${isSomeoneLogged} == false">
+
+    <h1>Pro zobrazení této stránky se musíte přihlásit.</h1>
+
+</div>
+
+<div class="indexPage" th:if="${isSomeoneLogged} == true">
+
+    <h2>Vyber si světadíl</h2>
+    <a href="/quiz/geography/capitals/europe">Evropa</a><br>
+    <a href="/quiz/geography/capitals/asia">Asie a Oceánie</a><br>
+    <a href="/quiz/geography/capitals/america">Severní a Jižní Amerika</a><br>
+    <a href="/quiz/geography/capitals/africa">Afrika</a>
+
+</div>
+</body>
+</html>

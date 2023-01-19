@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Kvíz</title>
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="indexPage" th:if="${loggedUser} == null">
+
+    <h1>Pro zobrazení této stránky se musíte přihlásit.</h1>
+
+</div>
+
+<div class="indexPage" th:if="${loggedUser} != null">
+
+    <h2>Výsledky</h2>
+
+    <p th:text="'Uhodl jsi ' + ${score} + ' z 10 otázek.'"></p></span>
+    <p th:if="${!failedStates.isEmpty()}" th:text="'Špatně jsi měl tyto státy:'"></p></span>
+    <div th:each="state : ${failedStates}">
+        <p th:text="${state}"></p>
+    </div>
+
+    <a href="/quiz/geography/capitals">Zkusit znovu</a></span>
+    <a href="/">Zpět na hlavní stránku</a>
+
+</div>
+</body>
+</html>

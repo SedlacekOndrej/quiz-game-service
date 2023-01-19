@@ -1,0 +1,70 @@
+.indexPage {
+    margin: auto;
+    width: 50%;
+    padding-top: 100px;
+    text-align: center;
+}
+
+#title {
+    font-size: 60px;
+    position: absolute;
+    left: 45%;
+}
+
+.rightCorner {
+    font-size: 20px;
+    position: absolute;
+    right: 10px;
+}
+
+.leftCorner {
+    font-size: 20px;
+    position: absolute;
+    left: 10px;
+}
+
+a:hover {
+    color: red;
+}
+
+.userDetails {
+    margin: auto;
+    width: 50%;
+    padding-top: 100px;
+    text-align: center;
+}
+
+.login {
+    margin: auto;
+    max-width: 500px;
+}
+
+.registration {
+    margin: auto;
+    max-width: 500px;
+}
+
+.errorMessage {
+    font-size: 20px;
+    color: red;
+    overflow: hidden;
+    clear: both;
+    text-align: center;
+}
+
+.input {
+    display: block;
+}
+
+.title {
+    margin: auto;
+    max-width: 500px;
+    padding-top: 100px;
+    padding-bottom: 20px;
+}
+
+.state {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
