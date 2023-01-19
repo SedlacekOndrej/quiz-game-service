@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Kvíz</title>
+  <link rel="stylesheet" th:href="@{/styles.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="indexPage" th:if="${loggedUser} == null">
+
+  <h1>Pro zobrazení této stránky se musíte přihlásit.</h1>
+
+</div>
+
+<div class="indexPage" th:if="${loggedUser} != null">
+
+  <h2>Jaké jsou hlavní města těchto států?</h2>
+
+  <form action="/quiz/geography/capitals/results" method="post">
+
+    <label class="state" th:text="'1. ' + ${states.get(0)}"></label>
+    <div th:each="answer : ${answers1}">
+    <input type="radio" name="capital1" th:text="${answer}" th:value="${answer}">
+    </div>
+
+    <label class="state" th:text="'2. ' + ${states.get(1)}"></label>
+    <div th:each="answer : ${answers2}">
+      <input type="radio" name="capital2" th:text="${answer}" th:value="${answer}">
+    </div>
+
+    <label class="state" th:text="'3. ' + ${states.get(2)}"></label>
+    <div th:each="answer : ${answers3}">
+      <input type="radio" name="capital3" th:text="${answer}" th:value="${answer}">
+    </div>
+
+    <label class="state" th:text="'4. ' + ${states.get(3)}"></label>
+    <div th:each="answer : ${answers4}">
+      <input type="radio" name="capital4" th:text="${answer}" th:value="${answer}">
+    </div>
+
+    <label class="state" th:text="'5. ' + ${states.get(4)}"></label>
+    <div th:each="answer : ${answers5}">
+      <input type="radio" name="capital5" th:text="${answer}" th:value="${answer}">
+    </div>
+
+    <label class="state" th:text="'6. ' + ${states.get(5)}"></label>
+    <div th:each="answer : ${answers6}">
+      <input type="radio" name="capital6" th:text="${answer}" th:value="${answer}">
+    </div>
+
+    <label class="state" th:text="'7. ' + ${states.get(6)}"></label>
+    <div th:each="answer : ${answers7}">
+      <input type="radio" name="capital7" th:text="${answer}" th:value="${answer}">
+    </div>
+
+    <label class="state" th:text="'8. ' + ${states.get(7)}"></label>
+    <div th:each="answer : ${answers8}">
+      <input type="radio" name="capital8" th:text="${answer}" th:value="${answer}">
+    </div>
+
+    <label class="state" th:text="'9. ' + ${states.get(8)}"></label>
+    <div th:each="answer : ${answers9}">
+      <input type="radio" name="capital9" th:text="${answer}" th:value="${answer}">
+    </div>
+
+    <label class="state" th:text="'10. ' + ${states.get(9)}"></label>
+    <div th:each="answer : ${answers10}">
+      <input type="radio" name="capital10" th:text="${answer}" th:value="${answer}">
+    </div>
+
+    <input class="submit" type="submit" value="Odeslat odpovědi"><br>
+
+  </form>
+
+</div>
+</body>
+</html>
