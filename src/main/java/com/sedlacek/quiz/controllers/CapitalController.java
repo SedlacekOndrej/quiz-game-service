@@ -30,9 +30,12 @@ public class CapitalController {
 
     @GetMapping("/quiz/geography/capitals/{chosenContinent}")
     public String getChosenCapitals(@PathVariable String chosenContinent, Model model) {
-        if (chosenContinent.equals("europe")) continent = States.Europe;
-        else if (chosenContinent.equals("asia")) continent = States.AsiaAndOceania;
-        else if (chosenContinent.equals("america")) continent = States.NorthAndSouthAmerica;
+        switch (chosenContinent) {
+            case "europe" -> continent = States.Europe;
+            case "asia" -> continent = States.AsiaAndOceania;
+            case "america" -> continent = States.NorthAndSouthAmerica;
+            case "africa" -> continent = States.Africa;
+        }
         return capitalService.renderCapitals(model, continent);
     }
 
