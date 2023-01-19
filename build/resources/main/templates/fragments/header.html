@@ -1,8 +1,0 @@
-<link rel="stylesheet" th:href="@{/styles.css}"/>
-<div xmlns:th="http://www.thymeleaf.org" th:fragment = "header">
-    <a class="leftCorner" th:if="${loggedUser} == null" href="/user/login">Přihlášení</a>
-    <a class="leftCorner" th:if="${loggedUser} != null" href="/user/details">Účet</a>
-    <span id="title">Kvíz</span>
-    <a class="rightCorner" th:if="${loggedUser} == null" href="/user/registration">Registrace</a>
-    <a class="rightCorner" th:if="${loggedUser} != null" href="/user/logout">Odhlásit</a>
-</div>
