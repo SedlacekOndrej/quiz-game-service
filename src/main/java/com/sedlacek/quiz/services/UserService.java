@@ -18,7 +18,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final LoginSessionRepository loginSessionRepository;
-    private ErrorMessage message = new ErrorMessage();
+    private final ErrorMessage message = new ErrorMessage();
     private LoginSession loginSessionUser;
 
 

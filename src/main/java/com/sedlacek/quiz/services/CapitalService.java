@@ -13,7 +13,7 @@ import java.util.*;
 public class CapitalService {
 
     private Map<String, String> chosenContinent;
-    private List<String> states = new ArrayList<>();
+    private List<String> states;
     private final List<String> failedStates = new ArrayList<>();
     private long score;
     private final UserService userService;
@@ -41,16 +41,11 @@ public class CapitalService {
         chosenContinent = continent;
         model.addAttribute("loggedUser", userService.tryGetLoginSessionUser());
         model.addAttribute("states", states);
-        model.addAttribute("answers1", generateAnswers(states.get(0), continent));
-        model.addAttribute("answers2", generateAnswers(states.get(1), continent));
-        model.addAttribute("answers3", generateAnswers(states.get(2), continent));
-        model.addAttribute("answers4", generateAnswers(states.get(3), continent));
-        model.addAttribute("answers5", generateAnswers(states.get(4), continent));
-        model.addAttribute("answers6", generateAnswers(states.get(5), continent));
-        model.addAttribute("answers7", generateAnswers(states.get(6), continent));
-        model.addAttribute("answers8", generateAnswers(states.get(7), continent));
-        model.addAttribute("answers9", generateAnswers(states.get(8), continent));
-        model.addAttribute("answers10", generateAnswers(states.get(9), continent));
+        int statesIndex = 0;
+        for (int i = 1; i < 11; i++) {
+            model.addAttribute("answers" + i, generateAnswers(states.get(statesIndex), continent));
+            statesIndex++;
+        }
         return "capitals";
     }
 
@@ -110,6 +105,6 @@ public class CapitalService {
         user.addExp(score * 10);
         user.setLevel(userService.levelCheck(user));
         userService.updateUserOnLoginSession(userRepository.save(user));
-        return "redirect:/quiz/geography/results";
+        return "redirect:/quiz/geography/capitals/results";
     }
 }
