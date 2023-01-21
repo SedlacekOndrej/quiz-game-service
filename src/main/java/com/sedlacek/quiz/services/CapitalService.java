@@ -15,6 +15,7 @@ public class CapitalService {
     private Map<String, String> chosenContinent;
     private List<String> states;
     private final List<String> failedStates = new ArrayList<>();
+    private List<String> answeredCapitals;
     private long score;
     private final UserService userService;
     private final UserRepository userRepository;
@@ -33,6 +34,9 @@ public class CapitalService {
         model.addAttribute("loggedUser", userService.tryGetLoginSessionUser());
         model.addAttribute("score", score);
         model.addAttribute("failedStates", failedStates);
+        model.addAttribute("chosenContinent", chosenContinent);
+        model.addAttribute("answeredCapitals", answeredCapitals);
+        model.addAttribute("states", states);
         return "results";
     }
 
@@ -99,7 +103,7 @@ public class CapitalService {
     }
 
     public String postAnswers(@ModelAttribute Capital capital) {
-        List<String> answeredCapitals = capital.answeredCapitals();
+        answeredCapitals = capital.answeredCapitals();
         playTheQuiz(answeredCapitals);
         User user = userService.tryGetLoginSessionUser();
         user.addExp(score * 10);
