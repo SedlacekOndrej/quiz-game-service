@@ -1,14 +1,14 @@
 package com.sedlacek.quiz.controllers;
 
+import com.sedlacek.quiz.models.RegisterUserDto;
 import com.sedlacek.quiz.models.User;
 import com.sedlacek.quiz.services.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 public class UserController {
 
     private final UserService userService;
@@ -22,14 +22,11 @@ public class UserController {
         return userService.renderIndexPage(model);
     }
 
-    @GetMapping("/user/registration")
-    public String getRegistrationPage(Model model) {
-        return userService.renderRegistrationPage(model);
-    }
 
-    @PostMapping("/user/registration")
-    public String userRegistration(@ModelAttribute User user, Model model, String passwordConfirm) {
-        return userService.registerNewUser(user, model, passwordConfirm);
+    @PostMapping("/api/user/registration")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public ResponseEntity<?> userRegistration(@RequestBody RegisterUserDto user, Model model) {
+        return userService.registerNewUser(user, model);
     }
 
     @GetMapping("/user/login")
@@ -37,7 +34,7 @@ public class UserController {
         return userService.renderLoginPage(model);
     }
 
-    @PostMapping("/user/login")
+    @PostMapping("/api/user/login")
     public String userLogin(@ModelAttribute User user) {
         return userService.loginUser(user);
     }

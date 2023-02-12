@@ -1,12 +1,12 @@
 package com.sedlacek.quiz.services;
 
-import com.sedlacek.quiz.models.Capital;
-import com.sedlacek.quiz.models.User;
+import com.sedlacek.quiz.models.*;
 import com.sedlacek.quiz.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import javax.persistence.Tuple;
 import java.util.*;
 
 @Service
@@ -14,7 +14,8 @@ public class CapitalService {
 
     private Map<String, String> chosenContinent;
     private List<String> states = new ArrayList<>();
-    private final List<String> failedStates = new ArrayList<>();
+    private final Map<String, String> failedStates = new HashMap<>();
+
     private long score;
     private final UserService userService;
     private final UserRepository userRepository;
@@ -30,9 +31,25 @@ public class CapitalService {
     }
 
     public String renderResults(Model model) {
+        var wrongResults = new ArrayList<QuizWrongAnswer>();
+
+        for (var wrongState : failedStates.entrySet()) {
+            var correctAnswer = chosenContinent.get(wrongState.getKey());
+
+            wrongResults.add(QuizWrongAnswer.builder()
+                    .withState(wrongState.getKey())
+                    .withSelectedAnswer(wrongState.getValue())
+                    .withCorrectAnswer(correctAnswer).build());
+        }
+
+        var result = QuizPlayResult.builder()
+                        .withUser(userService.tryGetLoginSessionUser())
+                        .withScore(score)
+                        .withWrongAnswers(wrongResults).build();
+
         model.addAttribute("loggedUser", userService.tryGetLoginSessionUser());
-        model.addAttribute("score", score);
-        model.addAttribute("failedStates", failedStates);
+        model.addAttribute("score", result.getScore());
+        model.addAttribute("failedStates", result.getWrongAnswers());
         return "results";
     }
 
@@ -94,10 +111,12 @@ public class CapitalService {
             if (capitals.get(index) == null) {
                 capitals.set(index, "");
             }
-            if (rightAnswer(chosenContinent.get(state), capitals.get(index))) {
+            var selectedCapital = capitals.get(index);
+
+            if (rightAnswer(chosenContinent.get(state), selectedCapital)) {
                 score++;
             } else {
-                failedStates.add(state);
+                failedStates.put(state, selectedCapital);
             }
             index++;
         }

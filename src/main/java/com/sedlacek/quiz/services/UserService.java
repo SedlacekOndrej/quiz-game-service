@@ -1,14 +1,14 @@
 package com.sedlacek.quiz.services;
 
-import com.sedlacek.quiz.models.ErrorMessage;
-import com.sedlacek.quiz.models.LoginSession;
-import com.sedlacek.quiz.models.User;
+import com.sedlacek.quiz.models.*;
 import com.sedlacek.quiz.repositories.LoginSessionRepository;
 import com.sedlacek.quiz.repositories.UserRepository;
 import org.hibernate.internal.util.StringHelper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,37 +44,42 @@ public class UserService {
         return "registration";
     }
 
-    public String registerNewUser(@ModelAttribute User user, Model model, String passwordConfirm) {
+    public ResponseEntity<?> registerNewUser(@RequestBody RegisterUserDto user, Model model) {
         if (StringHelper.isBlank(user.getUsername()) || StringHelper.isBlank(user.getPassword())
                 || StringHelper.isBlank(user.getEmail())) {
-            ErrorMessage.isError = true;
-            message.setMessage("Vyplňte všechna pole!");
-            return "redirect:/user/registration";
+            var response = new RegisterUserResponse();
+            response.setRegistered(false);
+            response.setResponseMessage("Vyplňte všechna pole!");
+            return ResponseEntity.badRequest().body(response);
         }
-        if (!passwordConfirmation(user, model, passwordConfirm)) {
-            ErrorMessage.isError = true;
-            message.setMessage("Hesla se neshodují!");
-            return "redirect:/user/registration";
+        if (!passwordConfirmation(user.getPassword(), model, user.getPasswordConfirm())) {
+            var response = new RegisterUserResponse();
+            response.setRegistered(false);
+            response.setResponseMessage("Hesla se neshodují!");
+            return ResponseEntity.badRequest().body(response);
         }
         if (userRepository.existsByUsername(user.getUsername())) {
-            ErrorMessage.isError = true;
-            message.setMessage("Zadané uživatelské jméno je již registrované!");
-            return "redirect:/user/registration";
+            var response = new RegisterUserResponse();
+            response.setRegistered(false);
+            response.setResponseMessage("Zadané uživatelské jméno je již registrované!");
+            return ResponseEntity.badRequest().body(response);
         }
         if (userRepository.existsByEmail(user.getEmail())) {
-            ErrorMessage.isError = true;
-            message.setMessage("Zadaný email je již registrován!");
-            return "redirect:/user/registration";
+            var response = new RegisterUserResponse();
+            response.setRegistered(false);
+            response.setResponseMessage("Zadaný email je již registrován!");
+            return ResponseEntity.badRequest().body(response);
         }
-        ErrorMessage.isError = false;
+        var response = new RegisterUserResponse();
+        response.setRegistered(true);
+        response.setResponseMessage("Uživatel byl úspěšně zaregistrován.");
         User newUser = new User(user.getUsername(), user.getPassword(), user.getEmail());
         userRepository.save(newUser);
-        return "redirect:/";
+        return ResponseEntity.ok().body(response);
     }
 
-    public boolean passwordConfirmation(@ModelAttribute User user, Model model, String passwordConfirm) {
-        model.addAttribute("passwordConfirm", passwordConfirm);
-        return user.getPassword().equals(passwordConfirm);
+    public boolean passwordConfirmation(String password, Model model, String passwordConfirm) {
+        return password.equals(passwordConfirm);
     }
 
     public String renderLoginPage(Model model) {

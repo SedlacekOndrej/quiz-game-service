@@ -21,7 +21,9 @@
     <p th:text="'Uhodl jsi ' + ${score} + ' z 10 otázek.'"></p></span>
     <p th:if="${!failedStates.isEmpty()}" th:text="'Špatně jsi měl tyto státy:'"></p></span>
     <div th:each="state : ${failedStates}">
-        <p th:text="${state}"></p>
+        <p th:text="${state.state}"></p>
+        <p th:text="|${state.selectedAnswer != null} ? 'Odpověděl jsi: ${state.selectedAnswer}' : Neuvedl jsi žádnou odpověď|"></p>
+        <p th:text="|'Správná odpověď:' ${state.correctAnswer}|"></p>
     </div>
 
     <a href="/quiz/geography/capitals">Zkusit znovu</a></span>
