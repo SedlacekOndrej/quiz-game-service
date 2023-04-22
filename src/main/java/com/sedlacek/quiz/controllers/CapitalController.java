@@ -1,12 +1,13 @@
 package com.sedlacek.quiz.controllers;
 
-import com.sedlacek.quiz.models.Capital;
+import com.sedlacek.quiz.models.Answer;
 import com.sedlacek.quiz.models.States;
 import com.sedlacek.quiz.services.CapitalService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -33,13 +34,14 @@ public class CapitalController {
             case "asia" -> continent = States.AsiaAndOceania;
             case "america" -> continent = States.NorthAndSouthAmerica;
             case "africa" -> continent = States.Africa;
+            default -> continent = new HashMap<>();
         }
         return capitalService.renderCapitals(model, continent);
     }
 
     @PostMapping("/results")
-    public String postAnswers(@ModelAttribute Capital capital) {
-        return capitalService.postAnswers(capital);
+    public String postAnswers(@ModelAttribute Answer answer) {
+        return capitalService.postAnswers(answer);
     }
 
     @GetMapping("/results")
