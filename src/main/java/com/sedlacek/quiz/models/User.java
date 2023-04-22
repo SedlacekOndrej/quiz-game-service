@@ -17,7 +17,7 @@ public class User extends EntityBase {
     private String password;
     private String email;
     private int level;
-    private Long exp;
+    private long exp;
     @OneToMany(mappedBy = "user")
     private List<LoginSession> loginSessions;
 

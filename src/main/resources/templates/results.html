@@ -18,10 +18,12 @@
 
     <h2>Výsledky</h2>
 
-    <p th:text="'Uhodl jsi ' + ${score} + ' z 10 otázek.'"></p></span>
-    <p th:if="${!failedStates.isEmpty()}" th:text="'Špatně jsi měl tyto státy:'"></p></span>
+    <p th:text="'Správně zodpovězeno ' + ${score} + ' z 10 otázek.'"></p></span>
+    <p th:if="${!failedStates.isEmpty()}" th:text="'Špatně zodpovězeno:'"></p></span>
     <div th:each="state : ${failedStates}">
-        <p th:text="${state}"></p>
+        <p th:text="${state}" style="font-weight: bold"></p>
+        <p th:text="${answeredCapitals.get(states.indexOf(state)) == ''} ? 'Nebyla zvolena žádná odpověď.' : 'Vaše odpověď byla ' + ${answeredCapitals.get(states.indexOf(state))} + '.'"></p>
+        <p th:text="'Správná odpověď je ' + ${chosenContinent.get(state)} + '.'"></p>
     </div>
 
     <a href="/quiz/geography/capitals">Zkusit znovu</a></span>

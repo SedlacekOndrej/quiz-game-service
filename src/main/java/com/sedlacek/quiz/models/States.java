@@ -3,6 +3,9 @@ package com.sedlacek.quiz.models;
 import java.util.Map;
 
 public class States {
+
+    private States() {}
+
     public static final Map<String, String> Europe = Map.ofEntries(
             Map.entry("Albánie", "Tirana"),
             Map.entry("Andorra", "Andorra la Vella"),
@@ -57,7 +60,7 @@ public class States {
             Map.entry("Vatikán", "Vatikán")
     );
 
-    public static final Map<String, String> AsiaAndOceania = Map.ofEntries(
+    public static final Map<String, String> AsiaAndOceania = Map.<String, String>ofEntries(
             Map.entry("Afghánistán", "Kábul"),
             Map.entry("Arménie", "Jerevan"),
             Map.entry("Austrálie", "Canberra"),
@@ -139,7 +142,7 @@ public class States {
             Map.entry("Venezuela", "Caracas")
     );
 
-    public static final Map<String, String> Africa = Map.ofEntries(
+    public static final Map<String, String> Africa = Map.<String, String>ofEntries(
             Map.entry("Alžírsko", "Alžír"),
             Map.entry("Angola", "Luanda"),
             Map.entry("Benin", "Porto Novo"),

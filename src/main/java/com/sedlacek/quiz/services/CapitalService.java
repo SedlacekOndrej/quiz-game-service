@@ -1,6 +1,6 @@
 package com.sedlacek.quiz.services;
 
-import com.sedlacek.quiz.models.Capital;
+import com.sedlacek.quiz.models.Answer;
 import com.sedlacek.quiz.models.User;
 import com.sedlacek.quiz.repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -13,11 +13,14 @@ import java.util.*;
 public class CapitalService {
 
     private Map<String, String> chosenContinent;
-    private List<String> states = new ArrayList<>();
+    private List<String> states;
     private final List<String> failedStates = new ArrayList<>();
+    private List<String> answeredCapitals;
     private long score;
     private final UserService userService;
     private final UserRepository userRepository;
+
+    private static final String LOGGED_USER = "loggedUser";
 
     public CapitalService(UserService userService, UserRepository userRepository) {
         this.userService = userService;
@@ -25,41 +28,39 @@ public class CapitalService {
     }
 
     public String renderContinentChoices(Model model) {
-        model.addAttribute("loggedUser", userService.tryGetLoginSessionUser());
+        model.addAttribute(LOGGED_USER, userService.tryGetLoginSessionUser());
         return "geography-capitals";
     }
 
     public String renderResults(Model model) {
-        model.addAttribute("loggedUser", userService.tryGetLoginSessionUser());
+        model.addAttribute(LOGGED_USER, userService.tryGetLoginSessionUser());
         model.addAttribute("score", score);
         model.addAttribute("failedStates", failedStates);
+        model.addAttribute("chosenContinent", chosenContinent);
+        model.addAttribute("answeredCapitals", answeredCapitals);
+        model.addAttribute("states", states);
         return "results";
     }
 
     public String renderCapitals(Model model, Map<String, String> continent) {
         states = generateRandomStates(continent);
         chosenContinent = continent;
-        model.addAttribute("loggedUser", userService.tryGetLoginSessionUser());
+        model.addAttribute(LOGGED_USER, userService.tryGetLoginSessionUser());
         model.addAttribute("states", states);
-        model.addAttribute("answers1", generateAnswers(states.get(0), continent));
-        model.addAttribute("answers2", generateAnswers(states.get(1), continent));
-        model.addAttribute("answers3", generateAnswers(states.get(2), continent));
-        model.addAttribute("answers4", generateAnswers(states.get(3), continent));
-        model.addAttribute("answers5", generateAnswers(states.get(4), continent));
-        model.addAttribute("answers6", generateAnswers(states.get(5), continent));
-        model.addAttribute("answers7", generateAnswers(states.get(6), continent));
-        model.addAttribute("answers8", generateAnswers(states.get(7), continent));
-        model.addAttribute("answers9", generateAnswers(states.get(8), continent));
-        model.addAttribute("answers10", generateAnswers(states.get(9), continent));
+        int statesIndex = 0;
+        for (int i = 1; i < 11; i++) {
+            model.addAttribute("answers" + i, generateAnswers(states.get(statesIndex), continent));
+            statesIndex++;
+        }
         return "capitals";
     }
 
     public List<String> generateRandomStates(Map<String, String> continent) {
         Random random = new Random();
         List<String> generatedStates = new ArrayList<>();
-        List<String> states = continent.keySet().stream().toList();
+        List<String> statesFromChosenContinent = continent.keySet().stream().toList();
         while (generatedStates.size() < 10) {
-            String generatedState = states.get(random.nextInt(continent.size() - 1));
+            String generatedState = statesFromChosenContinent.get(random.nextInt(continent.size() - 1));
             if (!generatedStates.contains(generatedState)) {
                 generatedStates.add(generatedState);
             }
@@ -103,13 +104,13 @@ public class CapitalService {
         }
     }
 
-    public String postAnswers(@ModelAttribute Capital capital) {
-        List<String> answeredCapitals = capital.answeredCapitals();
+    public String postAnswers(@ModelAttribute Answer answer) {
+        answeredCapitals = answer.answeredCapitals();
         playTheQuiz(answeredCapitals);
         User user = userService.tryGetLoginSessionUser();
         user.addExp(score * 10);
         user.setLevel(userService.levelCheck(user));
         userService.updateUserOnLoginSession(userRepository.save(user));
-        return "redirect:/quiz/geography/results";
+        return "redirect:/quiz/geography/capitals/results";
     }
 }
