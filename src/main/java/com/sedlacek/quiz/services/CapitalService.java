@@ -3,6 +3,8 @@ package com.sedlacek.quiz.services;
 import com.sedlacek.quiz.models.Answer;
 import com.sedlacek.quiz.models.User;
 import com.sedlacek.quiz.repositories.UserRepository;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -12,10 +14,17 @@ import java.util.*;
 @Service
 public class CapitalService {
 
+    @Setter
     private Map<String, String> chosenContinent;
+
+    @Setter
     private List<String> states;
+
+    @Getter
     private final List<String> failedStates = new ArrayList<>();
     private List<String> answeredCapitals;
+
+    @Getter
     private long score;
     private final UserService userService;
     private final UserRepository userRepository;
@@ -41,6 +50,7 @@ public class CapitalService {
         model.addAttribute("states", states);
         return "results";
     }
+
 
     public String renderCapitals(Model model, Map<String, String> continent) {
         states = generateRandomStates(continent);
