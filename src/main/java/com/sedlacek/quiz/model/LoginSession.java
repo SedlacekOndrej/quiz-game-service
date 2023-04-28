@@ -1,5 +1,7 @@
-package com.sedlacek.quiz.models;
+package com.sedlacek.quiz.model;
 
+import com.sedlacek.quiz.entity.EntityBase;
+import com.sedlacek.quiz.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -1,8 +1,8 @@
-package com.sedlacek.quiz.controllers;
+package com.sedlacek.quiz.controller;
 
-import com.sedlacek.quiz.models.Answer;
-import com.sedlacek.quiz.models.States;
-import com.sedlacek.quiz.services.CapitalService;
+import com.sedlacek.quiz.model.Answer;
+import com.sedlacek.quiz.model.States;
+import com.sedlacek.quiz.service.CapitalService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

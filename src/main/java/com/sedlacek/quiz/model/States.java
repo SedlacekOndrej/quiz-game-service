@@ -1,4 +1,4 @@
-package com.sedlacek.quiz.models;
+package com.sedlacek.quiz.model;
 
 import java.util.Map;
 

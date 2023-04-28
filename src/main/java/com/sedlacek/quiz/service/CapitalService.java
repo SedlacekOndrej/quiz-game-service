@@ -1,8 +1,10 @@
-package com.sedlacek.quiz.services;
+package com.sedlacek.quiz.service;
 
-import com.sedlacek.quiz.models.Answer;
-import com.sedlacek.quiz.models.User;
-import com.sedlacek.quiz.repositories.UserRepository;
+import com.sedlacek.quiz.dto.QuestionsDto;
+import com.sedlacek.quiz.model.Answer;
+import com.sedlacek.quiz.entity.User;
+import com.sedlacek.quiz.repository.UserRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -49,7 +51,7 @@ public class CapitalService {
         model.addAttribute("states", states);
         int statesIndex = 0;
         for (int i = 1; i < 11; i++) {
-            model.addAttribute("answers" + i, generateAnswers(states.get(statesIndex), continent));
+            model.addAttribute("answers" + i, generateQuestions(states.get(statesIndex), continent));
             statesIndex++;
         }
         return "capitals";
@@ -68,19 +70,19 @@ public class CapitalService {
         return generatedStates;
     }
 
-    public List<String> generateAnswers(String state, Map<String, String> continent) {
+    public List<String> generateQuestions(String state, Map<String, String> continent) {
         Random random = new Random();
-        List<String> generatedAnswers = new ArrayList<>();
-        generatedAnswers.add(continent.get(state));
+        List<String> generatedQuestions = new ArrayList<>();
+        generatedQuestions.add(continent.get(state));
         List<String> capitals = continent.values().stream().toList();
-        while (generatedAnswers.size() < 4) {
-            String generatedAnswer = capitals.get(random.nextInt(continent.size() - 1));
-            if (!generatedAnswers.contains(generatedAnswer)) {
-                generatedAnswers.add(generatedAnswer);
+        while (generatedQuestions.size() < 4) {
+            String generatedQuestion = capitals.get(random.nextInt(continent.size() - 1));
+            if (!generatedQuestions.contains(generatedQuestion)) {
+                generatedQuestions.add(generatedQuestion);
             }
         }
-        Collections.shuffle(generatedAnswers);
-        return generatedAnswers;
+        Collections.shuffle(generatedQuestions);
+        return generatedQuestions;
     }
 
     public boolean rightAnswer(String state, String capital) {
@@ -112,5 +114,15 @@ public class CapitalService {
         user.setLevel(userService.levelCheck(user));
         userService.updateUserOnLoginSession(userRepository.save(user));
         return "redirect:/quiz/geography/capitals/results";
+    }
+
+    public ResponseEntity<QuestionsDto> getQuestions(Map<String, String> continent) {
+        List<String> generatedStates = generateRandomStates(continent);
+        List<String> generatedCities = new ArrayList<>();
+        for (String state: generatedStates) {
+            List<String> cities = generateQuestions(state, continent);
+            generatedCities.addAll(cities);
+        }
+        return ResponseEntity.ok(new QuestionsDto(generatedStates, generatedCities));
     }
 }

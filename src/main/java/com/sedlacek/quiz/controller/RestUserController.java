@@ -1,8 +1,9 @@
-package com.sedlacek.quiz.controllers;
+package com.sedlacek.quiz.controller;
 
-import com.sedlacek.quiz.dtos.ResponseMessageDto;
-import com.sedlacek.quiz.dtos.UserDto;
-import com.sedlacek.quiz.services.UserService;
+import com.sedlacek.quiz.dto.ResponseDto;
+import com.sedlacek.quiz.dto.ResponseMessageDto;
+import com.sedlacek.quiz.dto.UserDto;
+import com.sedlacek.quiz.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,12 +20,17 @@ public class RestUserController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<ResponseMessageDto> registerUser(@RequestBody UserDto userDTO) {
-        return userService.registerUser(userDTO);
+    public ResponseEntity<ResponseMessageDto> registerUser(@RequestBody UserDto userDto) {
+        return userService.registration(userDto);
     }
 
     @GetMapping("/leaderboards")
     public ResponseEntity<List<UserDto>> getLeaderboards() {
         return userService.getAllUsersByExp();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ResponseDto> loginUser(@RequestBody UserDto userDto) {
+        return userService.login(userDto);
     }
 }
