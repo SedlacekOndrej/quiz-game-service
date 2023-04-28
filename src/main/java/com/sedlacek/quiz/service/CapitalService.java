@@ -1,6 +1,8 @@
 package com.sedlacek.quiz.service;
 
+import com.sedlacek.quiz.dto.AnswersDto;
 import com.sedlacek.quiz.dto.QuestionsDto;
+import com.sedlacek.quiz.dto.ResponseMessageDto;
 import com.sedlacek.quiz.model.Answer;
 import com.sedlacek.quiz.entity.User;
 import com.sedlacek.quiz.repository.UserRepository;
@@ -17,6 +19,7 @@ public class CapitalService {
     private Map<String, String> chosenContinent;
     private List<String> states;
     private final List<String> failedStates = new ArrayList<>();
+    private final List<String> succeededStates = new ArrayList<>();
     private List<String> answeredCapitals;
     private long score;
     private final UserService userService;
@@ -98,6 +101,7 @@ public class CapitalService {
                 capitals.set(index, "");
             }
             if (rightAnswer(chosenContinent.get(state), capitals.get(index))) {
+                succeededStates.add(state);
                 score++;
             } else {
                 failedStates.add(state);
@@ -124,5 +128,11 @@ public class CapitalService {
             generatedCities.addAll(cities);
         }
         return ResponseEntity.ok(new QuestionsDto(generatedStates, generatedCities));
+    }
+
+    public ResponseEntity<ResponseMessageDto> submitAnswers(AnswersDto answers) {
+        answeredCapitals = answers.answeredCapitals();
+        playTheQuiz(answeredCapitals);
+        return null;
     }
 }
