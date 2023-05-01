@@ -15,4 +15,7 @@ public class UserDto {
     private String email;
     private int level = 1;
     private long exp = 0L;
+    private int rightAnswers = 0;
+    private int wrongAnswers = 0;
+    private double percentage = 0.00;
 }

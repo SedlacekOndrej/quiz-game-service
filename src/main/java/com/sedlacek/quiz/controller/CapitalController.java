@@ -13,9 +13,6 @@ import java.util.Map;
 @Controller
 @RequestMapping("/quiz/geography/capitals")
 public class CapitalController {
-
-    Map<String, String> continent;
-
     private final CapitalService capitalService;
 
     public CapitalController(CapitalService capitalService) {
@@ -29,6 +26,7 @@ public class CapitalController {
 
     @GetMapping("/{chosenContinent}")
     public String getChosenCapitals(@PathVariable String chosenContinent, Model model) {
+        Map<String, String> continent;
         switch (chosenContinent) {
             case "europe" -> continent = States.Europe;
             case "asia" -> continent = States.AsiaAndOceania;

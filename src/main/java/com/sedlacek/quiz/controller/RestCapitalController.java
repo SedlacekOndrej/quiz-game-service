@@ -15,7 +15,6 @@ import java.util.Map;
 @RequestMapping("/api/capitals")
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class RestCapitalController {
-    Map<String, String> continent;
     private final CapitalService capitalService;
 
     public RestCapitalController(CapitalService capitalService) {
@@ -24,6 +23,7 @@ public class RestCapitalController {
 
     @GetMapping("/{continent}")
     public ResponseEntity<QuestionsDto> getQuestions(@PathVariable (name = "continent") String chosenContinent) {
+        Map<String, String> continent;
         switch (chosenContinent) {
             case "europe" -> continent = States.Europe;
             case "asia" -> continent = States.AsiaAndOceania;
