@@ -1,8 +1,8 @@
-package com.sedlacek.quiz.controllers;
+package com.sedlacek.quiz.controller;
 
-import com.sedlacek.quiz.models.Answer;
-import com.sedlacek.quiz.models.States;
-import com.sedlacek.quiz.services.CapitalService;
+import com.sedlacek.quiz.model.Answer;
+import com.sedlacek.quiz.model.States;
+import com.sedlacek.quiz.service.CapitalService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +13,6 @@ import java.util.Map;
 @Controller
 @RequestMapping("/quiz/geography/capitals")
 public class CapitalController {
-
-    Map<String, String> continent;
-
     private final CapitalService capitalService;
 
     public CapitalController(CapitalService capitalService) {
@@ -29,6 +26,7 @@ public class CapitalController {
 
     @GetMapping("/{chosenContinent}")
     public String getChosenCapitals(@PathVariable String chosenContinent, Model model) {
+        Map<String, String> continent;
         switch (chosenContinent) {
             case "europe" -> continent = States.Europe;
             case "asia" -> continent = States.AsiaAndOceania;

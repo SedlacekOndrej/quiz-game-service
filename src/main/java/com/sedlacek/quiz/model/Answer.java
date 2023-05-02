@@ -1,4 +1,4 @@
-package com.sedlacek.quiz.models;
+package com.sedlacek.quiz.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,16 +38,16 @@ public class Answer {
 
     public List<String> answeredCapitals() {
         List<String> capitals = new ArrayList<>();
-        capitals.add(this.answer1);
-        capitals.add(this.answer2);
-        capitals.add(this.answer3);
-        capitals.add(this.answer4);
-        capitals.add(this.answer5);
-        capitals.add(this.answer6);
-        capitals.add(this.answer7);
-        capitals.add(this.answer8);
-        capitals.add(this.answer9);
-        capitals.add(this.answer10);
+        capitals.add(answer1);
+        capitals.add(answer2);
+        capitals.add(answer3);
+        capitals.add(answer4);
+        capitals.add(answer5);
+        capitals.add(answer6);
+        capitals.add(answer7);
+        capitals.add(answer8);
+        capitals.add(answer9);
+        capitals.add(answer10);
         return capitals;
     }
 }

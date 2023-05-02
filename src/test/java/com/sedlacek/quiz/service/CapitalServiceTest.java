@@ -1,9 +1,4 @@
-package com.sedlacek.quiz.services;
-
-import com.sedlacek.quiz.models.User;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
+package com.sedlacek.quiz.service;
 
 class CapitalServiceTest {
     //CapitalService capitalService = new CapitalService();

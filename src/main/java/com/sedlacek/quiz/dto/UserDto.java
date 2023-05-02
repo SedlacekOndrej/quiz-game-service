@@ -1,4 +1,4 @@
-package com.sedlacek.quiz.dtos;
+package com.sedlacek.quiz.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,10 +15,7 @@ public class UserDto {
     private String email;
     private int level = 1;
     private long exp = 0L;
-
-    public UserDto(String username, String password, String email) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-    }
+    private int rightAnswers = 0;
+    private int wrongAnswers = 0;
+    private double percentage = 0.00;
 }

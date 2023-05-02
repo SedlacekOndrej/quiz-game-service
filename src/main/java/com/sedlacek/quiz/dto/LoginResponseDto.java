@@ -1,4 +1,4 @@
-package com.sedlacek.quiz.dtos;
+package com.sedlacek.quiz.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseMessageDto {
+public class LoginResponseDto {
+    private UserDto user;
     private String message;
 }

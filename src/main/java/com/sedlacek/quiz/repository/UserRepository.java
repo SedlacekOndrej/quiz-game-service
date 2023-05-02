@@ -1,6 +1,6 @@
-package com.sedlacek.quiz.repositories;
+package com.sedlacek.quiz.repository;
 
-import com.sedlacek.quiz.models.User;
+import com.sedlacek.quiz.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

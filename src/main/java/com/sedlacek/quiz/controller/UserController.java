@@ -1,7 +1,7 @@
-package com.sedlacek.quiz.controllers;
+package com.sedlacek.quiz.controller;
 
-import com.sedlacek.quiz.models.User;
-import com.sedlacek.quiz.services.UserService;
+import com.sedlacek.quiz.entity.User;
+import com.sedlacek.quiz.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
