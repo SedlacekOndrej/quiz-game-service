@@ -127,21 +127,6 @@ public class UserService {
 
     }
 
-    public int levelCheck(User user) {
-        List<Integer> expNeeded = new ArrayList<>(List.of(50));
-
-        for (int i = 0; i < 20; i++) {
-            expNeeded.add(expNeeded.get(i) * 2);
-        }
-
-        for (int i = expNeeded.size(); i > 0; i--) {
-            if (user.getExp() / expNeeded.get(i-1) > 0) {
-                return expNeeded.indexOf(expNeeded.get(i))+1;
-            }
-        }
-        return 1;
-    }
-
     public User tryGetLoginSessionUser() {
         List<LoginSession> loginSessions = loginSessionRepository.findAll();
         User user = null;
