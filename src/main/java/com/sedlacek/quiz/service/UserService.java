@@ -161,15 +161,12 @@ public class UserService {
 
     public ResponseEntity<LoginResponseDto> login(@NotNull UserDto userDto) {
         User user = userRepository.findByUsername(userDto.getUsername());
-        if (user != null) {
-            if (encoder.matches(userDto.getPassword(), user.getPassword())) {
-                UserDto responseUser = EntityBase.convert(user, UserDto.class);
-                return ResponseEntity.ok(new LoginResponseDto(responseUser, "Přihlášení proběhlo úspěšně"));
-            }
+        if (user != null && encoder.matches(userDto.getPassword(), user.getPassword())) {
+            UserDto responseUser = EntityBase.convert(user, UserDto.class);
+            return ResponseEntity.ok(new LoginResponseDto(responseUser, "Přihlášení proběhlo úspěšně"));
         } else {
             return ResponseEntity.badRequest().body(new LoginResponseDto(null, "Špatné uživatelské jméno nebo heslo"));
         }
-        return ResponseEntity.badRequest().body(new LoginResponseDto(null, "Špatné uživatelské jméno nebo heslo"));
     }
 
 }
