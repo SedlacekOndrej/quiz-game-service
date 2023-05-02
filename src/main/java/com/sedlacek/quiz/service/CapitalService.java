@@ -108,7 +108,7 @@ public class CapitalService {
         }
     }
 
-    public void playTheQuizDto(AnswersDto answers, List<String> states) {
+    public void playTheQuizRest(AnswersDto answers, List<String> states, User user) {
         score = 0;
         int index = 0;
         failedStates.clear();
@@ -118,9 +118,11 @@ public class CapitalService {
                 answers.getAnswers().set(index, "");
             }
             if (rightAnswer(chosenContinent.get(state), answers.getAnswers().get(index))) {
+                user.addRightAnswer();
                 succeededStates.add(state);
                 score++;
             } else {
+                user.addWrongAnswer();
                 failedStates.add(state);
             }
             index++;
@@ -132,7 +134,7 @@ public class CapitalService {
         playTheQuiz(answeredCapitals);
         User user = userService.tryGetLoginSessionUser();
         user.addExp(score * 10);
-        user.setLevel(userService.levelCheck(user));
+        user.levelCheck();
         userService.updateUserOnLoginSession(userRepository.save(user));
         return "redirect:/quiz/geography/capitals/results";
     }
@@ -155,7 +157,12 @@ public class CapitalService {
             case "africa" -> chosenContinent = States.Africa;
             default -> chosenContinent = new HashMap<>();
         }
-        playTheQuizDto(statesAndAnswers.getAnswers(), statesAndAnswers.getStates());
+        User user = userRepository.findByUsername(statesAndAnswers.getUsername());
+        playTheQuizRest(statesAndAnswers.getAnswers(), statesAndAnswers.getStates(), user);
+        user.addExp(score * 10);
+        user.countPercentage();
+        user.levelCheck();
+        userRepository.save(user);
         return ResponseEntity.ok(new PlayingResponseDto(score, failedStates, succeededStates));
     }
 }
