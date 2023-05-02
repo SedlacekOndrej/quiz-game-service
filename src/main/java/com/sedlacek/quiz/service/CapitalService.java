@@ -17,8 +17,8 @@ public class CapitalService {
     Random random = new Random();
     private Map<String, String> chosenContinent;
     private List<String> states;
-    private final List<String> failedStates = new ArrayList<>();
-    private final List<String> succeededStates = new ArrayList<>();
+    private List<String> failedStates;
+    private List<String> succeededStates;
     private List<String> answeredCapitals;
     private long score;
     private final UserService userService;
@@ -89,11 +89,23 @@ public class CapitalService {
         return capital.equals(state);
     }
 
+    private List<String> getFailedStates() {
+        if (failedStates == null) {
+            failedStates = new ArrayList<>();
+        } else return failedStates;
+    }
+
+    private List<String> getSucceededStates() {
+        if (succeededStates == null) {
+            succeededStates = new ArrayList<>();
+        } else return succeededStates;
+    }
+
     public void playTheQuiz(List<String> capitals) {
         score = 0;
         int index = 0;
-        failedStates.clear();
-        succeededStates.clear();
+        getFailedStates().clear();
+        getSucceededStates().clear();
         for (String state : states) {
             if (capitals.get(index) == null) {
                 capitals.set(index, "");
