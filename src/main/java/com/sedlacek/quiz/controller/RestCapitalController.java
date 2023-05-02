@@ -1,8 +1,6 @@
 package com.sedlacek.quiz.controller;
 
-import com.sedlacek.quiz.dto.AnswersDto;
-import com.sedlacek.quiz.dto.QuestionsDto;
-import com.sedlacek.quiz.dto.ResponseMessageDto;
+import com.sedlacek.quiz.dto.*;
 import com.sedlacek.quiz.model.States;
 import com.sedlacek.quiz.service.CapitalService;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +33,7 @@ public class RestCapitalController {
     }
 
     @PostMapping("/submit")
-    public ResponseEntity<ResponseMessageDto> submitAnswers(@RequestBody AnswersDto answers) {
-        return capitalService.submitAnswers(answers);
+    public ResponseEntity<PlayingResponseDto> submitAnswers(@RequestBody StatesAndAnswersDto statesAndAnswers) {
+        return capitalService.submitAnswers(statesAndAnswers);
     }
 }

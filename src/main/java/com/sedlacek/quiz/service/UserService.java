@@ -1,6 +1,6 @@
 package com.sedlacek.quiz.service;
 
-import com.sedlacek.quiz.dto.ResponseDto;
+import com.sedlacek.quiz.dto.LoginResponseDto;
 import com.sedlacek.quiz.dto.ResponseMessageDto;
 import com.sedlacek.quiz.entity.EntityBase;
 import com.sedlacek.quiz.model.ErrorMessage;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -175,17 +174,17 @@ public class UserService {
         return ResponseEntity.ok(userDtos);
     }
 
-    public ResponseEntity<ResponseDto> login(@NotNull UserDto userDto) {
+    public ResponseEntity<LoginResponseDto> login(@NotNull UserDto userDto) {
         User user = userRepository.findByUsername(userDto.getUsername());
         if (user != null) {
             if (encoder.matches(userDto.getPassword(), user.getPassword())) {
                 UserDto responseUser = EntityBase.convert(user, UserDto.class);
-                return ResponseEntity.ok(new ResponseDto(responseUser, "Přihlášení proběhlo úspěšně"));
+                return ResponseEntity.ok(new LoginResponseDto(responseUser, "Přihlášení proběhlo úspěšně"));
             }
         } else {
-            return ResponseEntity.badRequest().body(new ResponseDto(null, "Špatné uživatelské jméno nebo heslo"));
+            return ResponseEntity.badRequest().body(new LoginResponseDto(null, "Špatné uživatelské jméno nebo heslo"));
         }
-        return ResponseEntity.badRequest().body(new ResponseDto(null, "Špatné uživatelské jméno nebo heslo"));
+        return ResponseEntity.badRequest().body(new LoginResponseDto(null, "Špatné uživatelské jméno nebo heslo"));
     }
 
 }

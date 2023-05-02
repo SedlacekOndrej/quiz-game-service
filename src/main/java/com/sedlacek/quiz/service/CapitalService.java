@@ -1,10 +1,9 @@
 package com.sedlacek.quiz.service;
 
-import com.sedlacek.quiz.dto.AnswersDto;
-import com.sedlacek.quiz.dto.QuestionsDto;
-import com.sedlacek.quiz.dto.ResponseMessageDto;
+import com.sedlacek.quiz.dto.*;
 import com.sedlacek.quiz.model.Answer;
 import com.sedlacek.quiz.entity.User;
+import com.sedlacek.quiz.model.States;
 import com.sedlacek.quiz.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,7 @@ import java.util.*;
 
 @Service
 public class CapitalService {
-
+    Random random = new Random();
     private Map<String, String> chosenContinent;
     private List<String> states;
     private final List<String> failedStates = new ArrayList<>();
@@ -61,7 +60,6 @@ public class CapitalService {
     }
 
     public List<String> generateRandomStates(Map<String, String> continent) {
-        Random random = new Random();
         List<String> generatedStates = new ArrayList<>();
         List<String> statesFromChosenContinent = continent.keySet().stream().toList();
         while (generatedStates.size() < 10) {
@@ -74,7 +72,6 @@ public class CapitalService {
     }
 
     public List<String> generateQuestions(String state, Map<String, String> continent) {
-        Random random = new Random();
         List<String> generatedQuestions = new ArrayList<>();
         generatedQuestions.add(continent.get(state));
         List<String> capitals = continent.values().stream().toList();
@@ -96,11 +93,31 @@ public class CapitalService {
         score = 0;
         int index = 0;
         failedStates.clear();
+        succeededStates.clear();
         for (String state : states) {
             if (capitals.get(index) == null) {
                 capitals.set(index, "");
             }
             if (rightAnswer(chosenContinent.get(state), capitals.get(index))) {
+                succeededStates.add(state);
+                score++;
+            } else {
+                failedStates.add(state);
+            }
+            index++;
+        }
+    }
+
+    public void playTheQuizDto(AnswersDto answers, List<String> states) {
+        score = 0;
+        int index = 0;
+        failedStates.clear();
+        succeededStates.clear();
+        for (String state : states) {
+            if (answers.getAnswers().get(index) == null) {
+                answers.getAnswers().set(index, "");
+            }
+            if (rightAnswer(chosenContinent.get(state), answers.getAnswers().get(index))) {
                 succeededStates.add(state);
                 score++;
             } else {
@@ -130,9 +147,15 @@ public class CapitalService {
         return ResponseEntity.ok(new QuestionsDto(generatedStates, generatedCities));
     }
 
-    public ResponseEntity<ResponseMessageDto> submitAnswers(AnswersDto answers) {
-        answeredCapitals = answers.answeredCapitals();
-        playTheQuiz(answeredCapitals);
-        return null;
+    public ResponseEntity<PlayingResponseDto> submitAnswers(StatesAndAnswersDto statesAndAnswers) {
+        switch (statesAndAnswers.getContinent()) {
+            case "europe" -> chosenContinent = States.Europe;
+            case "asia" -> chosenContinent = States.AsiaAndOceania;
+            case "america" -> chosenContinent = States.NorthAndSouthAmerica;
+            case "africa" -> chosenContinent = States.Africa;
+            default -> chosenContinent = new HashMap<>();
+        }
+        playTheQuizDto(statesAndAnswers.getAnswers(), statesAndAnswers.getStates());
+        return ResponseEntity.ok(new PlayingResponseDto(score, failedStates, succeededStates));
     }
 }

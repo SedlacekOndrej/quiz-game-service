@@ -1,6 +1,6 @@
 package com.sedlacek.quiz.controller;
 
-import com.sedlacek.quiz.dto.ResponseDto;
+import com.sedlacek.quiz.dto.LoginResponseDto;
 import com.sedlacek.quiz.dto.ResponseMessageDto;
 import com.sedlacek.quiz.dto.UserDto;
 import com.sedlacek.quiz.service.UserService;
@@ -30,7 +30,7 @@ public class RestUserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseDto> loginUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<LoginResponseDto> loginUser(@RequestBody UserDto userDto) {
         return userService.login(userDto);
     }
 }

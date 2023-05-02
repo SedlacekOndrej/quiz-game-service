@@ -24,7 +24,7 @@ public class AnswersDto {
     private String answer9;
     private String answer10;
 
-    public List<String> answeredCapitals() {
+    public List<String> getAnswers() {
         List<String> capitals = new ArrayList<>();
         capitals.add(answer1);
         capitals.add(answer2);
