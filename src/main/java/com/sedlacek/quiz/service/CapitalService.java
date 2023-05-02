@@ -92,13 +92,15 @@ public class CapitalService {
     private List<String> getFailedStates() {
         if (failedStates == null) {
             failedStates = new ArrayList<>();
-        } else return failedStates;
+        }
+        return failedStates;
     }
 
     private List<String> getSucceededStates() {
         if (succeededStates == null) {
             succeededStates = new ArrayList<>();
-        } else return succeededStates;
+        }
+        return succeededStates;
     }
 
     public void playTheQuiz(List<String> capitals) {

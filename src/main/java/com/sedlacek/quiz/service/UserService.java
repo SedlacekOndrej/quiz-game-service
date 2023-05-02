@@ -164,9 +164,8 @@ public class UserService {
         if (user != null && encoder.matches(userDto.getPassword(), user.getPassword())) {
             UserDto responseUser = EntityBase.convert(user, UserDto.class);
             return ResponseEntity.ok(new LoginResponseDto(responseUser, "Přihlášení proběhlo úspěšně"));
-        } else {
-            return ResponseEntity.badRequest().body(new LoginResponseDto(null, "Špatné uživatelské jméno nebo heslo"));
         }
+        return ResponseEntity.badRequest().body(new LoginResponseDto(null, "Špatné uživatelské jméno nebo heslo"));
     }
 
 }
