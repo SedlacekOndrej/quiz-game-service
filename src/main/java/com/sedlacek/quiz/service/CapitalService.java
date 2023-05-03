@@ -148,7 +148,6 @@ public class CapitalService {
         playTheQuiz(answeredCapitals);
         User user = userService.tryGetLoginSessionUser();
         user.addExp(score * 10);
-        user.levelCheck();
         userService.updateUserOnLoginSession(userRepository.save(user));
         return "redirect:/quiz/geography/capitals/results";
     }
@@ -175,7 +174,6 @@ public class CapitalService {
         playTheQuizRest(statesAndAnswers.getAnswers(), statesAndAnswers.getStates(), user);
         user.addExp(score * 10);
         user.countPercentage();
-        user.levelCheck();
         userRepository.save(user);
         return ResponseEntity.ok(new PlayingResponseDto(score, failedStates, succeededStates));
     }
