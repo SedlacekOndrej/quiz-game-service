@@ -33,4 +33,9 @@ public class RestUserController {
     public ResponseEntity<LoginResponseDto> loginUser(@RequestBody UserDto userDto) {
         return userService.login(userDto);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto> getUser(@PathVariable (name = "id") long id) {
+        return userService.getUser(id);
+    }
 }

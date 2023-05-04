@@ -125,8 +125,8 @@ public class CapitalService {
     public void playTheQuizRest(AnswersDto answers, List<String> states, User user) {
         score = 0;
         int index = 0;
-        failedStates.clear();
-        succeededStates.clear();
+        getFailedStates().clear();
+        getSucceededStates().clear();
         for (String state : states) {
             if (answers.getAnswers().get(index) == null) {
                 answers.getAnswers().set(index, "");

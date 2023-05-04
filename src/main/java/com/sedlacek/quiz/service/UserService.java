@@ -168,4 +168,9 @@ public class UserService {
         return ResponseEntity.badRequest().body(new LoginResponseDto(null, "Špatné uživatelské jméno nebo heslo"));
     }
 
+    public ResponseEntity<UserDto> getUser(@NotNull long id) {
+        User user = userRepository.findById(id);
+        return ResponseEntity.ok(EntityBase.convert(user, UserDto.class));
+    }
+
 }
